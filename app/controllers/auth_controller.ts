@@ -9,9 +9,8 @@ export default class AuthController {
     }
 
     async handleRegister({request, session, response} : HttpContext){
-        const {firstname, lastname, email, password} = await request.validateUsing(registerUserValidator)
-
-        await User.create({email, firstname, lastname, password})
+        const {first_name, last_name, email, password} = await request.validateUsing(registerUserValidator)
+        await User.create({email, firstName:first_name, lastName:last_name, password})
         session.flash('success', 'You can now login !')
         return response.redirect().toRoute('auth.login')
     }
