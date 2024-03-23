@@ -6,7 +6,7 @@ export default class Role extends BaseModel {
   declare id: number
 
   @column()
-  declare name: String
+  declare name: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
