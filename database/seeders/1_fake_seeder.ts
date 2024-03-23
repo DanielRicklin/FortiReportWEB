@@ -4,7 +4,8 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
   async run() {
-    await CompanyFactory.createMany(10)
-    await UserFactory.createMany(15)
+    // await CompanyFactory.createMany(10)
+    const user = await UserFactory.with('company', 3).create()
+    console.log(user)
   }
 }

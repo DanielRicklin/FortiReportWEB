@@ -68,7 +68,8 @@
     "flowbite": "^2.3.0",
     "luxon": "^3.4.4",
     "mysql2": "^3.9.2",
-    "reflect-metadata": "^0.2.1"
+    "reflect-metadata": "^0.2.1",
+    "uuidv4": "^6.2.13"
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/app"
