@@ -11,5 +11,4 @@ export const UserFactory = factory
       password: faker.internet.password(),
     }
   })
-  .relation('company', () => CompanyFactory)
   .build()

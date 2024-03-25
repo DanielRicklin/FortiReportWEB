@@ -8,5 +8,4 @@ export const CompanyFactory = factory
       name: faker.company.name()
     }
   })
-  .relation('users', () => UserFactory)
   .build()

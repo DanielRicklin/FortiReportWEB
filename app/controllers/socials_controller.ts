@@ -43,7 +43,7 @@ export default class SocialsController {
         const githubUser = await gh.user()
         const user = await User.findBy('email', githubUser.email)
         if(!user){
-            const newUser = await User.create({firstname: githubUser.name.split(' ')[0], lastname: githubUser.name.split(' ')[1], email: githubUser.email, password: ''})
+            const newUser = await User.create({firstName: githubUser.name.split(' ')[0], lastName: githubUser.name.split(' ')[1], email: githubUser.email, password: ''})
             await auth.use('web').login(newUser)
         } else {
             await auth.use('web').login(user!)
