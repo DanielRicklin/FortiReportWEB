@@ -12,6 +12,7 @@ import HomeController from '#controllers/home_controller'
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 import SocialsController from '#controllers/socials_controller'
+import CompanyController from '#controllers/company_controller'
 
 
 router.get('/', [HomeController, 'home']).use(middleware.auth()).as('home')
@@ -28,4 +29,6 @@ router.group(() => {
 
 router.group(() => {
     router.delete('/login', [AuthController, 'logout']).as('auth.logout')
+    router.get('/company', [CompanyController, 'home']).as('company.home')
+    router.get('/company/:name', [CompanyController, 'show']).as('company.show').use(middleware.employee_in_company())
 }).use(middleware.auth())

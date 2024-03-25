@@ -1,0 +1,18 @@
+@layout()
+    <main class="pt-24 lg:pt-28">
+        <section class="lg:text-center">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                @each(company in companies)
+                    <a href="{{route('company.show', [company.slug])}}">
+                        <div class="mx-auto w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                <img class="p-8 rounded-t-lg" src="https://flowbite.com/docs/images/products/apple-watch.png" alt="product image" />
+                            <div class="px-5 pb-5">
+                                    <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">{{company.name}}</h5>
+                            </div>
+                        </div>
+                    </a>
+                @end
+            </div>
+        </section>
+    </main>
+@end
