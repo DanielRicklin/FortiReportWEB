@@ -18,3 +18,16 @@ export const loginUserValidator = vine.compile(
         password: vine.string().minLength(16)
     })
 )
+
+export const forgotPasswordValidator = vine.compile(
+    vine.object({
+        email: vine.string().email()
+    })
+)
+
+export const resetPasswordValidator = vine.compile(
+    vine.object({
+        token: vine.string(),
+        password: vine.string().minLength(16).confirmed()
+    })
+)

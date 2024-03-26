@@ -13,6 +13,7 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 import SocialsController from '#controllers/socials_controller'
 import CompanyController from '#controllers/company_controller'
+import ResetPasswordController from '#controllers/reset_password_controller'
 
 
 router.get('/', [HomeController, 'home']).use(middleware.auth()).as('home')
@@ -24,6 +25,10 @@ router.group(() => {
     router.post('/login', [AuthController, 'handleLogin'])
     router.get('/github/redirect', [SocialsController, 'githubRedirect']).as('github.redirect')
     router.get('/github/callback', [SocialsController, 'githubCallback']).as('github.callback')
+    router.get('/forgot-password', [ResetPasswordController, 'forgotPassword']).as('auth.forgot-password')
+    router.post('/forgot-password', [ResetPasswordController, 'handleForgotPassword'])
+    router.get('/reset-password', [ResetPasswordController, 'resetPassword'])
+    router.post('/reset-password', [ResetPasswordController, 'handleResetPassword']).as('auth.handleResetPassword')
 }).use(middleware.guest())
 
 

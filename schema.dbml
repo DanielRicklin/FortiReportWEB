@@ -59,10 +59,21 @@ Table firewalls {
   updated_at timestamp
 }
 
+Table tokens {
+  id integer [primary key]
+  token varchar
+  user_id integer
+  is_used boolean
+  expires_at timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
 Ref: roles.id > users.role_id
 Ref: employees.user_id - users.id
 Ref: employees.company_id - companies.id
 Ref: employees.employee_role_id < employee_roles.id
 Ref: firewalls.firewall_types_id < firewall_types.id
 Ref: firewalls.company_id < companies.id
+Ref: users.id > tokens.user_id 
 
