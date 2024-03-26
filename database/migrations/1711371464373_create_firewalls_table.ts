@@ -8,6 +8,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name')
+      table.string('ip')
+      table.integer('port')
+      table.string('api_key')
       table.integer('company_id').unsigned().references('companies.id').notNullable()
       table.integer('firewall_type_id').unsigned().references('firewall_types.id').notNullable().defaultTo(Firewall_Types.FORTIGATE)
       table.timestamp('created_at')

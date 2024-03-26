@@ -11,6 +11,15 @@ export default class Firewall extends BaseModel {
   declare name: string
 
   @column()
+  declare ip: string
+
+  @column()
+  declare port: number
+
+  @column()
+  declare apiKey: string
+
+  @column()
   declare companyId: number
 
   @belongsTo(() => Company)
