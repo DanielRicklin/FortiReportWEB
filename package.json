@@ -57,6 +57,7 @@
     "@adonisjs/ally": "^5.0.2",
     "@adonisjs/auth": "^9.1.1",
     "@adonisjs/core": "^6.2.2",
+    "@adonisjs/i18n": "^2.0.1",
     "@adonisjs/lucid": "^20.1.0",
     "@adonisjs/mail": "^9.2.0",
     "@adonisjs/session": "^7.1.1",

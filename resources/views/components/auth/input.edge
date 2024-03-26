@@ -21,11 +21,21 @@
             </svg>
         @end
     </span>
-    <input {{ $props.merge({ class: [className], type: 'text'}).toAttrs() }}>
+    @if(name == 'first_name')
+        <input {{ $props.merge({ class: [className], type: 'text'}).toAttrs() }} placeholder="{{t('auth.FIRSTNAME')}}">
+    @elseif(name == 'last_name')
+        <input {{ $props.merge({ class: [className], type: 'text'}).toAttrs() }} placeholder="{{t('auth.LASTNAME')}}">
+    @elseif(name == 'email')
+        <input {{ $props.merge({ class: [className], type: 'text'}).toAttrs() }} placeholder="Email">
+    @elseif(name == 'password')
+        <input {{ $props.merge({ class: [className], type: 'text'}).toAttrs() }} placeholder="{{t('auth.PASSWORD')}}">
+    @elseif(name == 'password_confirmation')
+        <input {{ $props.merge({ class: [className], type: 'text'}).toAttrs() }} placeholder="{{t('auth.PASSWORD_CONFIRMATION')}}">
+    @end
 </div>
 
 @inputError(name)
-    @each(message in $messages)
+    @each(message in $message)
         <p class="text-red-600">{{message}}</p>
     @end
 @end
