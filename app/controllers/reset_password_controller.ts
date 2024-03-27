@@ -1,4 +1,3 @@
-import Token from '#models/token'
 import User from '#models/user'
 import { forgotPasswordValidator, resetPasswordValidator } from '#validators/auth'
 import stringHelpers from '@adonisjs/core/helpers/string'
@@ -6,6 +5,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 import mail from '@adonisjs/mail/services/main'
 import env from '#start/env'
+import ResetToken from '#models/reset_token'
 
 export default class ResetPasswordController {
 
@@ -24,7 +24,7 @@ export default class ResetPasswordController {
 
         const token = stringHelpers.generateRandom(64)
         const url = `${env.get('PROTOCOL')}://${env.get('HOST')}:${env.get('PORT')}/reset-password?token=${token}`
-        Token.create({
+        ResetToken.create({
             token,
             userId: user.id,
             expiresAt: DateTime.now().plus({minutes: 20})
@@ -45,7 +45,7 @@ export default class ResetPasswordController {
     async resetPassword({request, session, response, view} : HttpContext){
         const token = request.input("token")
 
-        const tokenObj = await Token.findBy('token', token)
+        const tokenObj = await ResetToken.findBy('token', token)
         if(!tokenObj || tokenObj.isUsed === true || DateTime.now() > tokenObj.expiresAt){
             session.flash("error", "The link as expires or invalid")
             return response.redirect().toRoute('auth.forgot-password')
@@ -57,7 +57,7 @@ export default class ResetPasswordController {
     async handleResetPassword({request, session, response} : HttpContext){
         const {password, token} = await request.validateUsing(resetPasswordValidator)
 
-        const tokenObj = await Token.findBy('token', token)
+        const tokenObj = await ResetToken.findBy('token', token)
         if(!tokenObj || tokenObj.isUsed == 1 || DateTime.now() > tokenObj.expiresAt){
             session.flash("error", "The link as expires or invalid")
             return response.redirect().toRoute('auth.forgot-password')
