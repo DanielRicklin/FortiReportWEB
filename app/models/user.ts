@@ -29,7 +29,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
-  declare isValidated: boolean
+  declare isValidated: boolean | number
 
   @column()
   declare roleId: number
