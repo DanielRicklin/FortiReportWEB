@@ -65,7 +65,6 @@
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^2.0.2",
     "@vinejs/vine": "^1.7.1",
-    "crypto": "^1.0.1",
     "edge.js": "^6.0.1",
     "flowbite": "^2.3.0",
     "luxon": "^3.4.4",

@@ -29,6 +29,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
+  declare isValidated: boolean
+
+  @column()
   declare roleId: number
 
   @belongsTo(() => Role)

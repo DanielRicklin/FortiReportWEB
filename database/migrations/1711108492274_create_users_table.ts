@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.string('last_name').notNullable()
       table.string('email').notNullable().unique()
       table.string('password').nullable()
+      table.boolean('is_validated').notNullable().defaultTo(0)
       table.integer('role_id').unsigned().references('roles.id').notNullable().defaultTo(Roles.USER)
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

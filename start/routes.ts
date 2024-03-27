@@ -14,6 +14,7 @@ import { middleware } from '#start/kernel'
 import SocialsController from '#controllers/socials_controller'
 import CompanyController from '#controllers/company_controller'
 import ResetPasswordController from '#controllers/reset_password_controller'
+import EmailValidationController from '#controllers/email_validation_controller'
 
 
 router.get('/', [HomeController, 'home']).use(middleware.auth()).as('home')
@@ -29,6 +30,8 @@ router.group(() => {
     router.post('/forgot-password', [ResetPasswordController, 'handleForgotPassword'])
     router.get('/reset-password', [ResetPasswordController, 'resetPassword'])
     router.post('/reset-password', [ResetPasswordController, 'handleResetPassword']).as('auth.handleResetPassword')
+    router.get('/email-validation', [EmailValidationController, 'emailValidation'])
+    router.post('/email-validation', [EmailValidationController, 'handleEmailValidation']).as('auth.handleEmailValidation')
 }).use(middleware.guest())
 
 
