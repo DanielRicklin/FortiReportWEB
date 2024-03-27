@@ -5,8 +5,8 @@ export const registerUserValidator = vine.compile(
         first_name: vine.string().trim().alphaNumeric(),
         last_name: vine.string().trim().alphaNumeric(),
         email: vine.string().email().unique(async (db, value) => {
-            const users = await db.from('users').where('email', value).where('is_validated', 0).first()
-            return !!users
+            const users = await db.from('users').where('email', value).where('is_validated', 1).first()
+            return !users
         })
     })
 )

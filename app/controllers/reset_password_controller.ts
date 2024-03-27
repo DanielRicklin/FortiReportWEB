@@ -33,7 +33,6 @@ export default class ResetPasswordController {
         await mail.send((message) => {
             message
                 .to(user.email)
-                .from('no-reply@forti-report.com')
                 .subject('Forgot Password')
                 .htmlView('emails/forgot_password', {user, url})
         })

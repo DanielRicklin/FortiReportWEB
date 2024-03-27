@@ -15,16 +15,12 @@ export default class AuthController {
     async handleRegister({request, session, response} : HttpContext){
         const {first_name, last_name, email} = await request.validateUsing(registerUserValidator)
         
-        if(await User.query().where('email', email).where('is_validated', 0).first()){
-            session.flash('success', "You need to validate your account with the email you'll receive before login !")
-            return response.redirect().toRoute('auth.login')
-        }
         if(await User.query().where('email', email).where('is_validated', 1).first()){
             session.flash('success', "Try login !")
             return response.redirect().toRoute('auth.login')
         }
 
-        const user = await User.create({email, firstName:first_name, lastName:last_name})
+        const user = await User.updateOrCreate({email}, {firstName:first_name, lastName:last_name})
 
         const token = stringHelpers.generateRandom(64)
         const url = `${env.get('PROTOCOL')}://${env.get('HOST')}:${env.get('PORT')}/email-validation?token=${token}`
@@ -36,7 +32,6 @@ export default class AuthController {
         await mail.send((message) => {
             message
                 .to(email)
-                .from('no-reply@forti-report.com')
                 .subject('Email validation')
                 .htmlView('emails/email_validation', {user, url})
         })
