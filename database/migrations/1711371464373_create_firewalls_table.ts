@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.string('ip')
       table.integer('port')
       table.string('api_key')
-      table.integer('company_id').unsigned().references('companies.id').notNullable()
+      table.integer('company_id').unsigned().references('companies.id').notNullable().onDelete('CASCADE')
       table.integer('firewall_type_id').unsigned().references('firewall_types.id').notNullable().defaultTo(Firewall_Types.FORTIGATE)
       table.timestamp('created_at')
       table.timestamp('updated_at')
