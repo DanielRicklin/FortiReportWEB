@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import Company from './company.js'
 import FirewallType from './firewall_type.js'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export default class Firewall extends BaseModel {
   @column({ isPrimary: true })

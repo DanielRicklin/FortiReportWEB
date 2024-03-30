@@ -5,6 +5,7 @@ import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, belongsTo, column, computed, hasMany } from '@adonisjs/lucid/orm'
 import Role from '#models/role'
 import Employee from './employee.js'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],

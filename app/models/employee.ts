@@ -3,6 +3,7 @@ import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import User from './user.js'
 import Company from './company.js'
 import EmployeeRole from './employee_role.js'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export default class Employee extends BaseModel {
   @column({ isPrimary: true })

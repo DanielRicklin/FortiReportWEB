@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, beforeCreate, column, hasMany } from '@adonisjs/lucid/orm'
 import Employee from './employee.js'
 import string from '@adonisjs/core/helpers/string'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 
 export default class Company extends BaseModel {
 
