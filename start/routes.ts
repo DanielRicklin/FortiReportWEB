@@ -38,5 +38,6 @@ router.group(() => {
 router.group(() => {
     router.delete('/login', [AuthController, 'logout']).as('auth.logout')
     router.get('/company', [CompanyController, 'home']).as('company.home')
-    router.get('/company/:name', [CompanyController, 'show']).as('company.show').use(middleware.employee_in_company())
+    router.post('/company/create', [CompanyController, 'create']).as('company.create')
+    router.get('/company/:slug', [CompanyController, 'show']).as('company.show').where('slug', router.matchers.slug()) //.use(middleware.employee_in_company())
 }).use(middleware.auth())

@@ -2,10 +2,11 @@ import { DateTime } from 'luxon'
 import { withAuthFinder } from '@adonisjs/auth'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, belongsTo, column, computed, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, computed, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import Role from '#models/role'
 import Employee from './employee.js'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import Company from './company.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -40,6 +41,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Employee)
   declare employee: HasMany<typeof Employee>
+
+  @manyToMany(() => Company, {
+    pivotTable: "employees"
+  })
+  declare company: ManyToMany<typeof Company>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

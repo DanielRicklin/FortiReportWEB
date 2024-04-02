@@ -1,5 +1,8 @@
 @layout()
     <main class="pt-24 lg:pt-28">
-        SHOW
+        {{company.name}}
+        @each(firewall in company.firewalls)
+            {{firewall.ip}}
+        @end
     </main>
 @end

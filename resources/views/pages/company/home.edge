@@ -1,6 +1,30 @@
 @layout()
     <main class="pt-24 lg:pt-28">
-        <section class="lg:text-center">
+        <!-- <div class="flex justify-around">
+            <h1 class="mb-4 text-5xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white px-5">My companies</h1>
+            <a href="{{route('company.create')}}" class="px-6 py-3 text-sm font-medium tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                {{t('auth.RESET_PASSWORD')}}
+            </a>
+            <a href="" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mx-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 my-auto align-middle">qalut</a>
+        </div> -->
+        <div class="grid grid-cols-8 md:grid-cols-8 gap-3 mb-3 px-5">
+            <h1 class="text-center col-span-5 text-5xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white">{{t('companies.MY_COMPANIES')}}</h1>
+            <form action="{{route('company.create')}}" method="post" class="col-span-3">
+                {{ csrfField() }}
+                <div class="grid grid-cols-3 gap-3">
+                    <input name="company_name" id="company_name" type="text" class="col-span-2 block w-full py-2 text-gray-700 bg-white border rounded-lg px-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" placeholder="{{t('companies.COMPANY_NAME')}}">
+                    @inputError("company_name")
+                        @each(message in $message)
+                            <p class="text-red-600">{{message}}</p>
+                        @end
+                    @end
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mx-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 my-auto text-center">
+                        {{t('companies.NEW_COMPANIES')}}
+                    </button>
+                </div>
+            </form>
+        </div>
+        <section class="lg:text-center py-3">
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                 @each(company in companies)
                     <a href="{{route('company.show', [company.slug])}}">

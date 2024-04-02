@@ -1,0 +1,11 @@
+{
+    "shared": {
+        "fields": {
+            "company_name": "Company name"
+        },
+        "companies": {
+            "required": "{field} required",
+            "unique": "Choose another name"
+        }
+    }
+}

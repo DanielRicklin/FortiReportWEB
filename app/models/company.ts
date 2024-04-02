@@ -1,8 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import Employee from './employee.js'
 import string from '@adonisjs/core/helpers/string'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import User from './user.js'
+import Firewall from './firewall.js'
 
 export default class Company extends BaseModel {
 
@@ -23,6 +25,14 @@ export default class Company extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @manyToMany(() => User, {
+    pivotTable: "employees"
+  })
+  declare users: ManyToMany<typeof User>
+
+  @hasMany(() => Firewall)
+  declare firewalls: HasMany<typeof Firewall>
 
   @beforeCreate()
   static async slugify(company: Company){
