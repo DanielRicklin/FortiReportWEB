@@ -1,12 +1,5 @@
 @layout()
-    <main class="pt-24 lg:pt-28">
-        <!-- <div class="flex justify-around">
-            <h1 class="mb-4 text-5xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white px-5">My companies</h1>
-            <a href="{{route('company.create')}}" class="px-6 py-3 text-sm font-medium tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-                {{t('auth.RESET_PASSWORD')}}
-            </a>
-            <a href="" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mx-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 my-auto align-middle">qalut</a>
-        </div> -->
+    <main class="pt-24 lg:pt-28 mx-12">
         <div class="grid grid-cols-8 md:grid-cols-8 gap-3 mb-3 px-5">
             <h1 class="text-center col-span-5 text-5xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white">{{t('companies.MY_COMPANIES')}}</h1>
             <form action="{{route('company.create')}}" method="post" class="col-span-3">
@@ -24,18 +17,65 @@
                 </div>
             </form>
         </div>
-        <section class="lg:text-center py-3">
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                @each(company in companies)
-                    <a href="{{route('company.show', [company.slug])}}">
-                        <div class="mx-auto w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                <img class="p-8 rounded-t-lg" src="https://flowbite.com/docs/images/products/apple-watch.png" alt="product image" />
-                            <div class="px-5 pb-5">
-                                    <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">{{company.name}}</h5>
-                            </div>
-                        </div>
-                    </a>
-                @end
+        <section class="py-3">
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr class="text-center">
+                            <th scope="col" class="px-6 py-3">
+                                Name
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(company in companies)
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{company.name}}
+                                </th>
+                                <td class="px-6 py-4">
+                                    <a href="{{route('company.show', [company.slug])}}" class="font-medium text-green-600 dark:text-green-500 hover:underline">Show</a>
+                                    <button data-modal-target="edit-modal-{{company.slug}}" data-modal-toggle="edit-modal-{{company.slug}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3" type="button">Edit</button>
+                                    <form action="{{route('company.delete', [company.slug])}}?_method=DELETE" method="post" class="inline">
+                                        {{ csrfField() }}
+                                        <button class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3" type="submit">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <!-- Modal Edit Company -->
+                            <div id="edit-modal-{{company.slug}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                <div class="relative p-4 w-full max-w-md max-h-full">
+                                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                                Edit company
+                                            </h3>
+                                            <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="edit-modal-{{company.slug}}">
+                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                </svg>
+                                                <span class="sr-only">Close modal</span>
+                                            </button>
+                                        </div>
+                                        <div class="p-4 md:p-5">
+                                            <form class="space-y-4" action="{{route('company.edit', [company.slug])}}" method="post">
+                                                {{ csrfField() }}
+                                                <div>
+                                                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                                                    <input type="text" name="name" id="name" class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" value="{{company.name}}" required />
+                                                </div>
+                                                <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update company</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        @end
+                    </tbody>
+                </table>
             </div>
         </section>
     </main>

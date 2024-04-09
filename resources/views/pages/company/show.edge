@@ -1,8 +1,50 @@
 @layout()
-    <main class="pt-24 lg:pt-28">
-        {{company.name}}
-        @each(firewall in company.firewalls)
-            {{firewall.ip}}
-        @end
+    <main class="pt-24 lg:pt-28 mx-12">
+        <div class="grid grid-cols-8 md:grid-cols-8 gap-3 mb-3 px-5">
+            <h1 class="text-center col-span-6 text-4xl font-bold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-4xl dark:text-white">Firewalls for {{company.name}}</h1>
+            <a href="{{route('firewall.create', [company.slug])}}" class="col-span-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mx-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 my-auto text-center">Add Firewall</a>
+        </div>
+        <section class="lg:text-center py-3">
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Name
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                IP
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Port
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(firewall in company.firewalls)
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{firewall.name}}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{firewall.ip}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{firewall.port}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="font-medium text-green-600 dark:text-green-500 hover:underline">Show</a>
+                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3">Edit</a>
+                                    <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
+                                </td>
+                            </tr>
+                        @end
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 @end

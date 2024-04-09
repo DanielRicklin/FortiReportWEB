@@ -8,3 +8,12 @@ export const createCompanyValidator = vine.compile(
         })
     })
 )
+
+export const editCompanyValidator = vine.compile(
+    vine.object({
+        name: vine.string().unique(async (db, value) => {
+            const companies = await db.from('companies').where('name', value).first()
+            return !companies
+        })
+    })
+)

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeSave, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import Employee from './employee.js'
 import string from '@adonisjs/core/helpers/string'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
@@ -34,10 +34,8 @@ export default class Company extends BaseModel {
   @hasMany(() => Firewall)
   declare firewalls: HasMany<typeof Firewall>
 
-  @beforeCreate()
+  @beforeSave()
   static async slugify(company: Company){
-    if(company.slug) return
-
     const slug = string.slug(company.name, {
       replacement: '-',
       lower: true,

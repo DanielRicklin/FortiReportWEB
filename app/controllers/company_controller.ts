@@ -3,12 +3,11 @@ import Roles from "#enums/roles";
 import Company from "#models/company";
 import Employee from "#models/employee";
 import User from "#models/user";
-import { createCompanyValidator } from "#validators/company";
+import { createCompanyValidator, editCompanyValidator } from "#validators/company";
 import { HttpContext } from "@adonisjs/core/http";
 
 export default class CompanyController {
     async home({auth, view} : HttpContext){
-        console.log("home")
         if(auth.user?.roleId === Roles.ADMIN){
             const companies = await Company.all()
             return view.render('pages/company/home', {companies})
@@ -44,6 +43,40 @@ export default class CompanyController {
             companyId: newCompany.id,
             employeeRoleId: Employee_Roles.ADMIN_R
         })
-        return response.redirect().toRoute('company.show', { id :  newCompany.id})
+        return response.redirect().toRoute('company.show', { slug :  newCompany.slug})
+    }
+
+    async edit({auth, params, view, request, response} : HttpContext){
+        const {name} = await request.validateUsing(editCompanyValidator)
+
+        const companies = await User.query().where('id', Number(auth.user?.id)).first()
+        await companies?.load('company')
+
+        const result = companies?.company.filter(cp => cp.slug === params.slug)
+
+        if(!result?.length){
+            return view.render('pages/errors/not_found')
+        }
+
+        const company = await Company.findBy('slug', params.slug)
+        await company?.merge({name}).save()
+
+        return response.redirect().toRoute('company.show', { slug :  company?.slug})
+    }
+
+    async delete({auth, params, view, response} : HttpContext){
+        const companies = await User.query().where('id', Number(auth.user?.id)).first()
+        await companies?.load('company')
+
+        const result = companies?.company.filter(cp => cp.slug === params.slug)
+
+        if(!result?.length){
+            return view.render('pages/errors/not_found')
+        }
+
+        const company = await Company.findBy('slug', params.slug)
+        await company?.delete()
+
+        return response.redirect().toRoute('company.home')
     }
 }

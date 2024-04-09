@@ -15,6 +15,7 @@ import SocialsController from '#controllers/socials_controller'
 import CompanyController from '#controllers/company_controller'
 import ResetPasswordController from '#controllers/reset_password_controller'
 import EmailValidationController from '#controllers/email_validation_controller'
+import FirewallController from '#controllers/firewall_controller'
 
 
 router.get('/', [HomeController, 'home']).use(middleware.auth()).as('home')
@@ -37,7 +38,23 @@ router.group(() => {
 
 router.group(() => {
     router.delete('/login', [AuthController, 'logout']).as('auth.logout')
-    router.get('/company', [CompanyController, 'home']).as('company.home')
-    router.post('/company/create', [CompanyController, 'create']).as('company.create')
-    router.get('/company/:slug', [CompanyController, 'show']).as('company.show').where('slug', router.matchers.slug()) //.use(middleware.employee_in_company())
+    router.group(() => {
+        router.get('', [CompanyController, 'home']).as('company.home')
+        router.post('create', [CompanyController, 'create']).as('company.create')
+
+        router.group(() => {
+            // Company routes with slug
+            router.get('', [CompanyController, 'show']).as('company.show') //.use(middleware.employee_in_company())
+            router.post('', [CompanyController, 'edit']).as('company.edit')
+            router.delete('', [CompanyController, 'delete']).as('company.delete')
+
+            // Firewall routes
+            router.group(() => {
+                router.get('create', [FirewallController, 'create']).as('firewall.create')
+                router.post('', [FirewallController, 'handleCreate']).as('firewall.handleCreate')
+            }).prefix('/firewall')
+
+        }).prefix('/:slug').where('slug', router.matchers.slug())
+
+    }).prefix('/company')
 }).use(middleware.auth())
