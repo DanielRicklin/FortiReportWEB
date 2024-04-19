@@ -57,4 +57,15 @@ router.group(() => {
         }).prefix('/:slug').where('slug', router.matchers.slug())
 
     }).prefix('/company')
+
+    //Firewall routes
+    router.group(() => {
+        router.get('', [FirewallController, 'home']).as('firewall.home')
+
+        router.group(() => {
+            router.get('', [FirewallController, 'show']).as('firewall.show')
+            router.delete('', [FirewallController, 'delete']).as('firewall.delete')
+        }).prefix('/:id').where('id', router.matchers.number())
+    }).prefix('/firewall')
+
 }).use(middleware.auth())

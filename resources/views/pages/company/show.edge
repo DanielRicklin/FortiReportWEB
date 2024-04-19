@@ -36,9 +36,12 @@
                                     {{firewall.port}}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="#" class="font-medium text-green-600 dark:text-green-500 hover:underline">Show</a>
-                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3">Edit</a>
-                                    <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
+                                    <a href="{{route('firewall.show', [firewall.id])}}" class="font-medium text-green-600 dark:text-green-500 hover:underline">Show</a>
+                                    <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3" type="button">Edit</button>
+                                    <form action="{{route('firewall.delete', [firewall.id])}}?_method=DELETE" method="post" class="inline">
+                                        {{ csrfField() }}
+                                        <button class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3" type="submit">Remove</button>
+                                    </form>
                                 </td>
                             </tr>
                         @end

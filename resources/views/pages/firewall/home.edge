@@ -1,0 +1,60 @@
+@layout()
+    <main class="pt-24 lg:pt-28 mx-12">
+        <!-- <div class="grid grid-cols-8 md:grid-cols-8 gap-3 mb-3 px-5"> -->
+            <h1 class="text-center col-span-5 text-5xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white">My firewalls</h1>
+        <!-- </div> -->
+        <section class="lg:text-center py-8">
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Name
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Company
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                IP
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Port
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(company in user.company)
+                            @each(firewall in company.firewalls)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{firewall.name}}
+                                    </th>
+                                    <th scope="row" class="px-6 py-4">
+                                        {{company.name}}
+                                    </th>
+                                    <td scope="row" class="px-6 py-4">
+                                        {{firewall.ip}}
+                                    </td>
+                                    <td scope="row" class="px-6 py-4">
+                                        {{firewall.port}}
+                                    </td>
+                                    <td scope="row" class="px-6 py-4">
+                                        <a href="{{route('firewall.show', [firewall.id])}}" class="font-medium text-green-600 dark:text-green-500 hover:underline">Show</a>
+                                        <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3" type="button">Edit</button>
+                                        <form action="{{route('firewall.delete', [firewall.id])}}?_method=DELETE" method="post" class="inline">
+                                            {{ csrfField() }}
+                                            <button class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3" type="submit">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @end
+                        @end
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+@end

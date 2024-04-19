@@ -1,7 +1,9 @@
 import Firewall_Types from '#enums/firewall_types'
+import Roles from '#enums/roles'
 import Company from '#models/company'
 import Firewall from '#models/firewall'
 import User from '#models/user'
+import FirewallPolicy from '#policies/firewall_policy'
 import { createFirewallValidator } from '#validators/firewall'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -36,5 +38,31 @@ export default class FirewallController {
         await company?.load('firewalls')
         
         return view.render('pages/company/show', {company})
+    }
+
+    async home({auth, view} : HttpContext){
+        if(auth.user?.roleId === Roles.ADMIN){
+            const firewall = await Firewall.all()
+            return view.render('pages/firewall/home', {firewall})
+        } else {
+            const user = await User.query().where('id', Number(auth.user?.id)).preload('company', query => {
+                query.preload('firewalls')
+            }).first()
+            return view.render('pages/firewall/home', {user})
+        }
+    }
+
+    async delete({auth, params, view, response, bouncer} : HttpContext){
+        const firewall = await Firewall.findBy('id', params.id)
+        if(await bouncer.with(FirewallPolicy).denies('belongToUser', firewall)){
+            return response.redirect().toRoute('firewall.home')
+        }
+        await firewall?.delete()
+
+        return response.redirect().toRoute('firewall.home')
+    }
+
+    async show({} : HttpContext){
+
     }
 }
