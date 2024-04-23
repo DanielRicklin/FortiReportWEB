@@ -3,6 +3,7 @@ import Roles from "#enums/roles";
 import Company from "#models/company";
 import Employee from "#models/employee";
 import User from "#models/user";
+import CompanyPolicy from "#policies/company_policy";
 import { createCompanyValidator, editCompanyValidator } from "#validators/company";
 import { HttpContext } from "@adonisjs/core/http";
 
@@ -18,17 +19,12 @@ export default class CompanyController {
         }
     }
 
-    async show({view, params, auth}: HttpContext){
-        const companies = await User.query().where('id', Number(auth.user?.id)).first()
-        await companies?.load('company')
-
-        const result = companies?.company.filter(cp => cp.slug === params.slug)
-
-        if(!result?.length){
+    async show({view, params, bouncer}: HttpContext){
+        const company = await Company.findBy('slug', params.slug)
+        if(await bouncer.with(CompanyPolicy).denies('belongToUser', company)){
             return view.render('pages/errors/not_found')
         }
 
-        const company = await Company.findBy('slug', params.slug)
         await company?.load('firewalls')
         
         return view.render('pages/company/show', {company})
@@ -46,35 +42,25 @@ export default class CompanyController {
         return response.redirect().toRoute('company.show', { slug :  newCompany.slug})
     }
 
-    async edit({auth, params, view, request, response} : HttpContext){
+    async edit({bouncer, params, view, request, response} : HttpContext){
         const {name} = await request.validateUsing(editCompanyValidator)
 
-        const companies = await User.query().where('id', Number(auth.user?.id)).first()
-        await companies?.load('company')
-
-        const result = companies?.company.filter(cp => cp.slug === params.slug)
-
-        if(!result?.length){
+        const company = await Company.findBy('slug', params.slug)
+        if(await bouncer.with(CompanyPolicy).denies('belongToUser', company)){
             return view.render('pages/errors/not_found')
         }
 
-        const company = await Company.findBy('slug', params.slug)
         await company?.merge({name}).save()
 
         return response.redirect().toRoute('company.show', { slug :  company?.slug})
     }
 
-    async delete({auth, params, view, response} : HttpContext){
-        const companies = await User.query().where('id', Number(auth.user?.id)).first()
-        await companies?.load('company')
-
-        const result = companies?.company.filter(cp => cp.slug === params.slug)
-
-        if(!result?.length){
+    async delete({bouncer, params, view, response} : HttpContext){
+        const company = await Company.findBy('slug', params.slug)
+        if(await bouncer.with(CompanyPolicy).denies('belongToUser', company)){
             return view.render('pages/errors/not_found')
         }
 
-        const company = await Company.findBy('slug', params.slug)
         await company?.delete()
 
         return response.redirect().toRoute('company.home')

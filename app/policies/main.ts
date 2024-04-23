@@ -13,5 +13,6 @@
 */
 
 export const policies = {
+  CompanyPolicy: () => import('#policies/company_policy'),
   FirewallPolicy: () => import('#policies/firewall_policy')
 }
