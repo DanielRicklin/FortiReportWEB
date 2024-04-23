@@ -18,8 +18,13 @@ export default class FirewallController {
         return view.render('pages/firewall/create', {company})
     }
 
-    async handleCreate({request, view} : HttpContext){
+    async handleCreate({request, view, response, bouncer} : HttpContext){
         const {name, ip, port, api_key, company_id} = await request.validateUsing(createFirewallValidator)
+
+        const company = await Company.findBy('id', company_id)
+        if(await bouncer.with(CompanyPolicy).denies('belongToUser', company)){
+            return response.redirect().toRoute('company.home')
+        }
 
         await Firewall.create({
             name,
@@ -30,9 +35,7 @@ export default class FirewallController {
             firewallTypeId: Firewall_Types.FORTIGATE
         })
 
-        const company = await Company.findBy('id', company_id)
         await company?.load('firewalls')
-        
         return view.render('pages/company/show', {company})
     }
 
@@ -48,7 +51,7 @@ export default class FirewallController {
         }
     }
 
-    async delete({auth, params, view, response, bouncer} : HttpContext){
+    async delete({params, response, bouncer} : HttpContext){
         const firewall = await Firewall.findBy('id', params.id)
         if(await bouncer.with(FirewallPolicy).denies('belongToUser', firewall)){
             return response.redirect().toRoute('firewall.home')
