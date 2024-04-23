@@ -17,7 +17,7 @@ export default class CompanyPolicy extends BasePolicy {
         await user.preload('company', query => {
             query.where('slug', company.slug)
         })
-        const res = user.company.filter(company => company.length != 0)
+        const res = user.company.filter(cmpn => cmpn.length != 0)
         return (res.length != 0) ? true : false
     }
 }
