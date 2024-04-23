@@ -5,10 +5,15 @@ import Firewall from '#models/firewall'
 import User from '#models/user'
 import CompanyPolicy from '#policies/company_policy'
 import FirewallPolicy from '#policies/firewall_policy'
+import FirewallService from '#services/firewall_service'
 import { createFirewallValidator } from '#validators/firewall'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class FirewallController {
+    constructor(protected firewall_service: FirewallService){}
+
     async create({view, bouncer, params} : HttpContext){
         const company = await Company.findBy('slug', params.slug)
         if(await bouncer.with(CompanyPolicy).denies('belongToUser', company)){
@@ -61,12 +66,13 @@ export default class FirewallController {
         return response.redirect().toRoute('firewall.home')
     }
 
-    async show({bouncer, response, params} : HttpContext){
+    async show({bouncer, response, params, view} : HttpContext){
         const firewall = await Firewall.findBy('id', params.id)
         if(await bouncer.with(FirewallPolicy).denies('belongToUser', firewall)){
             return response.redirect().toRoute('firewall.home')
         }
 
-
+        const config = await this.firewall_service.getConfig(firewall)
+        return view.render('pages/firewall/show', {firewall, config})
     }
 }
