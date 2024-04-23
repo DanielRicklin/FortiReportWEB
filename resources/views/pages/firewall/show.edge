@@ -1,6 +1,10 @@
 @layout()
     <main class="pt-24 lg:pt-28 mx-12">
         <h1 class="text-center col-span-5 text-5xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white">{{firewall.name}}</h1>
-        {{inspect(config)}}
+
+        @each(vdom in config)
+            @!firewall.interface({ interfaces : vdom.interface, vdom_name : vdom.name})
+            @!firewall.service({ services : vdom.service})
+        @end
     </main>
 @end
