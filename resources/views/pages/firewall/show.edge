@@ -1,10 +1,42 @@
 @layout()
     <main class="pt-24 lg:pt-28 mx-12">
-        <h1 class="text-center col-span-5 text-5xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white">{{firewall.name}}</h1>
-
-        @each(vdom in config)
-            @!firewall.interface({ interfaces : vdom.interface, vdom_name : vdom.name})
-            @!firewall.service({ services : vdom.service})
+        <h1 class="text-center col-span-5 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-4xl dark:text-white">{{firewall.name}}</h1>
+        @each((vdom, index) in config)
+            <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+                    <li class="me-2" role="presentation">
+                        @if(index == 0)
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="vdom-{{vdom.name}}-tab" data-tabs-target="#vdom-{{vdom.name}}" type="button" role="tab" aria-controls="vdom-{{vdom.name}}" aria-selected="false">{{vdom.name}}</button>
+                        @else
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="vdom-{{vdom.name}}-tab" data-tabs-target="#vdom-{{vdom.name}}" type="button" role="tab" aria-controls="vdom-{{vdom.name}}" aria-selected="false">{{vdom.name}}</button>
+                        @end
+                    </li>
+                    <li class="me-2" role="presentation">
+                    </li>
+                </ul>
+            </div>
+            <div id="default-tab-content">
+                <div class="hidden dark:bg-gray-800" id="vdom-{{vdom.name}}" role="tabpanel" aria-labelledby="vdom-{{vdom.name}}-tab">
+                    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+                            <li class="me-2" role="presentation">
+                                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="interface-tab" data-tabs-target="#interface" type="button" role="tab" aria-controls="interface" aria-selected="false">Interface</button>
+                            </li>
+                            <li class="me-2" role="presentation">
+                                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="service-tab" data-tabs-target="#service" type="button" role="tab" aria-controls="service" aria-selected="false">Service</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="default-tab-content">
+                        <div class="hidden dark:bg-gray-800" id="interface" role="tabpanel" aria-labelledby="interface-tab">
+                            @!firewall.interface({ interfaces : vdom.interface, vdom_name : vdom.name})
+                        </div>
+                        <div class="hidden dark:bg-gray-800" id="service" role="tabpanel" aria-labelledby="service-tab">
+                            @!firewall.service({ services : vdom.service})
+                        </div>
+                    </div>
+                </div>
+            </div>
         @end
     </main>
 @end

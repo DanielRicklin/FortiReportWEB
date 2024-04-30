@@ -1,71 +1,48 @@
-<h2 class="col-span-5 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-4xl dark:text-white">Service</h2>
-<section class="lg:text-center py-8">
-    <div class="relative overflow-x-auto">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Service name
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Protocol
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Port
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Comment
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @each(service in services)
-                    @if(service.hasOwnProperty('tcp-portrange') && service.hasOwnProperty('udp-portrange') && service.hasOwnProperty('sctp-portrange') && service['visibility'] == 'enable')
-                        @let(protocols = "")
-                        @let(udp = false)
-                        @let(sctp = false)
-                        @let(ports = "")
-                        
-                        @if(service['tcp-portrange'])
-                            @assign(protocols += "TCP")
-                            @assign(ports = service['tcp-portrange'])
-                        @end
-                        @if(service['udp-portrange'] && protocols == "")
-                            @assign(protocols += "UDP")
-                            @assign(udp = true)
-                            @assign(ports = service['udp-portrange'])
-                        @end
-                        @if(service['udp-portrange'] && protocols != "" && !udp)
-                            @assign(protocols += "/UDP")
-                            @assign(ports = service['udp-portrange'])
-                        @end
-                        @if(service['sctp-portrange'] && protocols == "")
-                            @assign(protocols += "SCTP")
-                            @assign(sctp = true)
-                            @assign(ports = service['sctp-portrange'])
-                        @end
-                        @if(service['sctp-portrange'] && protocols != "" && !sctp)
-                            @assign(protocols += "/SCTP")
-                            @assign(ports = service['sctp-portrange'])
-                        @end
-                        @assign(ports = ports.replace(' ', '/'))
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{service.name}}
-                            </th>
-                            <td scope="row" class="px-6 py-4">
-                                {{protocols}}
-                            </td>
-                            <td scope="row" class="px-6 py-4">
-                                {{ports}}
-                            </td>
-                            <td scope="row" class="px-6 py-4">
-                                {{service.comment}}
-                            </td>
-                        </tr>
-                    @end
+<section class="lg:text-center dark:text-white">
+    <div class="bg-orange-200 rounded-lg dark:bg-orange-900">
+        <div class="grid grid-cols-4 gap-4 bg-gray-200 rounded-t-lg dark:bg-gray-800">
+            <div class="font-medium p-2">Service name</div>
+            <div class="font-medium p-2">Protocol</div>
+            <div class="font-medium p-2">Port</div>
+            <div class="font-medium p-2">Comment</div>
+        </div>
+        @each(service in services)
+            @if(service.hasOwnProperty('tcp-portrange') && service.hasOwnProperty('udp-portrange') && service.hasOwnProperty('sctp-portrange') && service['visibility'] == 'enable')
+                @let(protocols = "")
+                @let(udp = false)
+                @let(sctp = false)
+                @let(ports = "")
+                
+                @if(service['tcp-portrange'])
+                    @assign(protocols += "TCP")
+                    @assign(ports = service['tcp-portrange'])
                 @end
-            </tbody>
-        </table>
+                @if(service['udp-portrange'] && protocols == "")
+                    @assign(protocols += "UDP")
+                    @assign(udp = true)
+                    @assign(ports = service['udp-portrange'])
+                @end
+                @if(service['udp-portrange'] && protocols != "" && !udp)
+                    @assign(protocols += "/UDP")
+                    @assign(ports = service['udp-portrange'])
+                @end
+                @if(service['sctp-portrange'] && protocols == "")
+                    @assign(protocols += "SCTP")
+                    @assign(sctp = true)
+                    @assign(ports = service['sctp-portrange'])
+                @end
+                @if(service['sctp-portrange'] && protocols != "" && !sctp)
+                    @assign(protocols += "/SCTP")
+                    @assign(ports = service['sctp-portrange'])
+                @end
+                @assign(ports = ports.replace(' ', '/'))
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="font-medium p-2">{{service.name}}</div>
+                    <div class="p-2">{{protocols}}</div>
+                    <div class="p-2">{{ports}}</div>
+                    <div class="p-2">{{service.comment}}</div>
+                </div>
+            @end
+        @end
     </div>
 </section>
