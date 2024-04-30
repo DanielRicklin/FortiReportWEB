@@ -20,34 +20,50 @@
             </thead>
             <tbody>
                 @each(service in services)
-                    @let(protocols = "")
-                    @let(udp = false)
-                    @let(ports = "")
-                    
-                    @if(service['tcp-portrange'])
-                        @assign(protocols += "TCP")
+                    @if(service.hasOwnProperty('tcp-portrange') && service.hasOwnProperty('udp-portrange') && service.hasOwnProperty('sctp-portrange') && service['visibility'] == 'enable')
+                        @let(protocols = "")
+                        @let(udp = false)
+                        @let(sctp = false)
+                        @let(ports = "")
+                        
+                        @if(service['tcp-portrange'])
+                            @assign(protocols += "TCP")
+                            @assign(ports = service['tcp-portrange'])
+                        @end
+                        @if(service['udp-portrange'] && protocols == "")
+                            @assign(protocols += "UDP")
+                            @assign(udp = true)
+                            @assign(ports = service['udp-portrange'])
+                        @end
+                        @if(service['udp-portrange'] && protocols != "" && !udp)
+                            @assign(protocols += "/UDP")
+                            @assign(ports = service['udp-portrange'])
+                        @end
+                        @if(service['sctp-portrange'] && protocols == "")
+                            @assign(protocols += "SCTP")
+                            @assign(sctp = true)
+                            @assign(ports = service['sctp-portrange'])
+                        @end
+                        @if(service['sctp-portrange'] && protocols != "" && !sctp)
+                            @assign(protocols += "/SCTP")
+                            @assign(ports = service['sctp-portrange'])
+                        @end
+                        @assign(ports = ports.replace(' ', '/'))
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{service.name}}
+                            </th>
+                            <td scope="row" class="px-6 py-4">
+                                {{protocols}}
+                            </td>
+                            <td scope="row" class="px-6 py-4">
+                                {{ports}}
+                            </td>
+                            <td scope="row" class="px-6 py-4">
+                                {{service.comment}}
+                            </td>
+                        </tr>
                     @end
-                    @if(service['udp-portrange'] && protocols == "")
-                        @assign(protocols += "UDP")
-                        @assign(udp = true)
-                    @end
-                    @if(service['udp-portrange'] && protocols != "" && !udp)
-                        @assign(protocols += "/UDP")
-                    @end
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{service.name}}
-                        </th>
-                        <th scope="row" class="px-6 py-4">
-                            
-                        </th>
-                        <td scope="row" class="px-6 py-4">
-
-                        </td>
-                        <td scope="row" class="px-6 py-4">
-                            {{service.comment}}
-                        </td>
-                    </tr>
                 @end
             </tbody>
         </table>
