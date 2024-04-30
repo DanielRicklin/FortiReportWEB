@@ -25,6 +25,9 @@
                             <li class="me-2" role="presentation">
                                 <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="service-{{vdom.name}}-tab" data-tabs-target="#service-{{vdom.name}}" type="button" role="tab" aria-controls="service-{{vdom.name}}" aria-selected="false">Service</button>
                             </li>
+                            <li class="me-2" role="presentation">
+                                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="service_group-{{vdom.name}}-tab" data-tabs-target="#service_group-{{vdom.name}}" type="button" role="tab" aria-controls="service_group-{{vdom.name}}" aria-selected="false">Service group</button>
+                            </li>
                         </ul>
                     </div>
                     <div id="default-tab-content">
@@ -33,6 +36,9 @@
                         </div>
                         <div class="hidden dark:bg-gray-800" id="service-{{vdom.name}}" role="tabpanel" aria-labelledby="service-{{vdom.name}}-tab">
                             @!firewall.service({ services : vdom.service})
+                        </div>
+                        <div class="hidden dark:bg-gray-800" id="service_group-{{vdom.name}}" role="tabpanel" aria-labelledby="service_group-{{vdom.name}}-tab">
+                            @!firewall.servicegroup({ service_groups : vdom.service_group})
                         </div>
                     </div>
                 </div>
